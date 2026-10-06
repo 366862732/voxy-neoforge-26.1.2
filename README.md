@@ -16,7 +16,7 @@ Voxy 采用 **All Rights Reserved（ARR）** 协议，由 MCRcortex 所有，明
 
 ## 环境要求
 
-- JDK 21
+- JDK 25
 - Git
 
 ## 编译方法
@@ -92,7 +92,7 @@ If you are the original author and wish for this repository to be taken down, pl
 
 ## Requirements
 
-- JDK 21
+- JDK 25
 - Git
 
 ## How to Build
