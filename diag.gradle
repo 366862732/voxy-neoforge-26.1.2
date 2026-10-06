@@ -1,0 +1,19 @@
+import org.gradle.api.artifacts.result.UnresolvedDependencyResult
+
+gradle.projectsEvaluated {
+    def p = gradle.rootProject
+    p.tasks.register('diagResolve') {
+        doLast {
+            def c = p.configurations.getByName('compileClasspath')
+            def res = c.incoming.resolutionResult
+            println "==== UNRESOLVED DEPENDENCIES ===="
+            res.allDependencies.each { dep ->
+                if (dep instanceof UnresolvedDependencyResult) {
+                    println "DEP requested=${dep.requested.displayName}"
+                    println "   FAILURE: ${dep.failure.message}"
+                    dep.failure.causes.each { println "   CAUSE: ${it.message}" }
+                }
+            }
+        }
+    }
+}

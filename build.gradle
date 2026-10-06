@@ -1,0 +1,252 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url = 'D:/voxy-2612/local-maven' }
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'net.neoforged:moddev-gradle:2.0.141'
+    }
+}
+
+apply plugin: 'java-library'
+apply plugin: 'net.neoforged.moddev'
+apply plugin: 'maven-publish'
+
+// 配置 Gradle 工具链，使用本地 JDK 26
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(26)
+    }
+}
+
+// ── Fix: NeoFormRuntime capability + artifact name from local Maven POM ───
+// Gradle only reads POM from local file-based Maven repos (ignores .module).
+// POM-derived variants are named 'runtimeElements' (not 'runtime').
+// POM-derived variants lack the capability 'net.neoforged:neoform-runtime-external-tools',
+// which the NeoForged plugin requires for the neoFormRuntimeExternalTools config.
+// Also, POM lists no classifier, so Gradle looks for neoform-runtime-2.0.18.jar,
+// but the actual file is neoform-runtime-2.0.18-all.jar (fat jar).
+dependencies {
+    components {
+        withModule('net.neoforged:neoform-runtime') { ComponentMetadataDetails details ->
+            details.withVariant('runtimeElements') { VariantMetadata variant ->
+                variant.withCapabilities { MutableCapabilitiesMetadata caps ->
+                    caps.addCapability('net.neoforged', 'neoform-runtime-external-tools', '2.0.18')
+                }
+                variant.withFiles { MutableVariantFilesMetadata files ->
+                    files.removeAllFiles()
+                    files.addFile('neoform-runtime-2.0.18-all.jar', 'neoform-runtime-2.0.18-all.jar')
+                }
+            }
+        }
+        withModule('net.neoforged:neoform') { ComponentMetadataDetails details ->
+            ['compile', 'runtime'].each { vName ->
+                details.withVariant(vName) { VariantMetadata variant ->
+                    variant.withCapabilities { MutableCapabilitiesMetadata caps ->
+                        caps.addCapability('net.neoforged', 'neoform-dependencies', '26.1.2-1')
+                    }
+                    variant.withFiles { MutableVariantFilesMetadata files ->
+                        files.removeAllFiles()
+                    }
+                }
+            }
+        }
+        /* DIAG-TEST-DISABLED
+        withModule('net.neoforged:neoforge') { ComponentMetadataDetails details ->
+            details.withVariant('runtime') { VariantMetadata variant ->
+                variant.withCapabilities { MutableCapabilitiesMetadata caps ->
+                    caps.addCapability('net.neoforged', 'neoforge-moddev-bundle', '26.1.2.114')
+                    caps.addCapability('net.neoforged', 'neoforge-dependencies', '26.1.2.114')
+                }
+                variant.withFiles { MutableVariantFilesMetadata files ->
+                    files.removeAllFiles()
+                    files.addFile('neoforge-26.1.2.114-userdev.jar', 'neoforge-26.1.2.114-userdev.jar')
+                    // NFRT 也需要 universal 变体来处理 transforms
+                    files.addFile('neoforge-26.1.2.114-universal.jar', 'neoforge-26.1.2.114-universal.jar')
+                }
+            }
+        }
+        */
+    }
+}
+
+version = project.mod_version
+group = project.maven_group
+base { archivesName = project.archives_base_name }
+
+def gitCommitHash = { ->
+    try {
+        ExecOutput result = providers.exec {
+            commandLine = ['git', 'rev-parse', 'HEAD']
+            ignoreExitValue = true
+        }
+        if (result.getResult().get().getExitValue() != 0) return "<UnknownCommit>"
+        return result.standardOutput.asText.get().strip()
+    } catch (Exception e) {
+        return "<UnknownCommit>"
+    }
+}
+
+def buildtime = { System.currentTimeSeconds() }
+
+// ── NeoForge runtime setup ─────────────────────────────────────────────
+neoForge {
+    version = project.neo_version
+
+    accessTransformers.from(file('src/main/resources/META-INF/accesstransformer.cfg'))
+
+    runs {
+        client {
+            client()
+            gameDirectory = project.file('run')
+            systemProperty 'forge.logging.console.level', 'debug'
+        }
+        server {
+            server()
+            gameDirectory = project.file('run')
+            systemProperty 'forge.logging.console.level', 'debug'
+        }
+    }
+}
+
+configurations {
+    // jopt-simple 版本冲突：minecraft-dependencies 要求 strictly 5.0.4，
+    // 而 AutoRenamingTool 带出 6.0-alpha-3，二者不可调和。
+    // 统一强制 5.0.4（与 Minecraft 运行时一致）。
+    configureEach {
+        if (name.startsWith('neoFormRuntimeDependencies')) {
+            resolutionStrategy.force 'net.sf.jopt-simple:jopt-simple:5.0.4'
+        }
+    }
+    // 离线仓库中这些模块没有可用的 sources 变体，会导致 artifactManifestEntries 求值失败。
+    // 只从 sources 配置中排除，不影响 classes 配置与运行时依赖。
+    neoFormRuntimeDependenciesNeoForgeSources {
+        exclude group: 'net.neoforged', module: 'minecraft-dependencies'
+        exclude group: 'com.mojang', module: 'logging'
+    }
+    // LWJGL natives 单独解析：仅用于「提取二进制 → 合并成一个 jar」再交给 JiJ。
+    // 背景：ModDevGradle 生成 JiJ metadata 时既丢弃 classifier，又拿 jar 的 Java 模块名
+    // 当 identifier，于是 lwjgl-zstd 的 windows / linux natives 都变成
+    // org.lwjgl.zstd.natives，运行期 JarJar 只保留一个，另一个平台的
+    // natives jar 不在 classpath 上 → Failed to locate library: lwjgl_zstd.dll
+    // 参见 https://github.com/neoforged/ModDevGradle/issues/306
+    lwjglNatives {
+        canBeResolved = true
+        canBeConsumed = false
+        transitive = false
+    }
+    // dev 运行（runClient）仍需要各平台 natives 在 classpath 上，故让 implementation 继承该配置
+    implementation.extendsFrom(lwjglNatives)
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven { url = 'D:/voxy-2612/local-maven' }
+    maven {
+        name = 'NeoForged'
+        url = 'https://maven.neoforged.net/releases'
+    }
+    maven {
+        name = 'CaffeineMC'
+        url = 'https://maven.caffeinemc.net/releases'
+    }
+}
+
+// 把各平台 LWJGL natives 合并成单个 jar 再入包：
+// 合并后的 jar 同时含 windows/x64/... 与 linux/x64/...，LWJGL 会按当前平台拼 bundled 路径；
+// JiJ 的文件依赖必须带显式 Java 模块名，这里给一个本项目独有的 Automatic-Module-Name，
+// 于是所有平台的 natives 只对应一个唯一 identifier，不会在运行期被 JarJar 去重丢弃。
+def mergedLwjglNatives = tasks.register('mergeLwjglNatives', Jar) {
+    archiveFileName = 'voxy-lwjgl-natives.jar'
+    destinationDirectory = layout.buildDirectory.dir('lwjgl-natives')
+    from({ configurations.lwjglNatives.collect { zipTree(it) } }) {
+        include 'windows/**'
+        include 'linux/**'
+        include 'META-INF/windows/**'
+        include 'META-INF/linux/**'
+        exclude 'META-INF/MANIFEST.MF'
+        exclude 'META-INF/versions/**'
+        exclude 'META-INF/INDEX.LIST'
+    }
+    manifest {
+        attributes('Automatic-Module-Name': 'voxy.lwjgl.natives')
+    }
+}
+
+dependencies {
+    // Sodium NeoForge – compileOnly (already installed in the game)
+    compileOnly "net.caffeinemc:sodium-neoforge:${sodium_version}"
+
+    // Iris (optional, loaded via reflection at runtime)
+    compileOnly 'net.irisshaders:iris:1.11.4+mc26.1.2'
+
+    // Optional mod-compat classes referenced by mixins / instanceof checks.
+    // Compile-time only: mixin targets that are absent at runtime are skipped by Mixin.
+    def modrinthCache = "${gradle.gradleUserHomeDir}/caches/modules-2/files-2.1/maven.modrinth"
+    compileOnly files("${modrinthCache}/lithium/mc26.3-0.26.1-fabric/91e91c955650afaf98e4acebee060a58ac99ade5/lithium-mc26.3-0.26.1-fabric.jar")
+    compileOnly files("${modrinthCache}/nvidium/0.4.3-beta13-26.1/d624ef22260483c83810b494aed673fa595a65/nvidium-0.4.3-beta13-26.1.jar")
+    compileOnly files("${modrinthCache}/flashback/VaqZB1DF/ff7d5bad4c213ef8f7f90d0434864882cffbfbf4/flashback-VaqZB1DF.jar")
+    // Flashback (Fabric-only) implements Fabric loader entrypoints; the stub jar is needed
+    // only so javac can resolve its class hierarchy. See local-maven/net/fabricmc/fabric-loader-stubs.
+    compileOnly 'net.fabricmc:fabric-loader-stubs:1.0.0'
+    compileOnly files("${modrinthCache}/vivecraft/26.2-1.3.12-fabric/5a6e9ef6eda01fb6f570d840eb65647a04084857/vivecraft-26.2-1.3.12-fabric.jar")
+    // Chunky (NeoForge) – auto-ingest the chunks Chunky pre-generates.
+    // Vendored into local-maven because Modrinth's Gradle cache only holds the Fabric build.
+    compileOnly "maven.modrinth:chunky:NeoForge-1.5.4"
+
+    // Embedded (jarJar) – RocksDB, Jedis, pools, SQLite, XZ, LWJGL LMDB/ZSTD
+    jarJar(implementation "org.rocksdb:rocksdbjni:${rocksdb_version}")
+    jarJar(implementation "redis.clients:jedis:${jedis_version}")
+    jarJar(implementation "org.apache.commons:commons-pool2:${commons_pool2_version}")
+    jarJar(implementation "org.xerial:sqlite-jdbc:${sqlite_jdbc_version}")
+    jarJar(implementation "org.tukaani:xz:${xz_version}")
+
+    jarJar(implementation "org.lwjgl:lwjgl-lmdb:${lwjgl_version}")
+    jarJar(implementation "org.lwjgl:lwjgl-zstd:${lwjgl_version}")
+
+    // natives 走 lwjglNatives（由 implementation 继承，dev 运行可用）；
+    // 入包的是合并后的 voxy-lwjgl-natives.jar，identifier 唯一，不会被 JiJ 去重丢弃。
+    lwjglNatives "org.lwjgl:lwjgl-lmdb:${lwjgl_version}:natives-windows"
+    lwjglNatives "org.lwjgl:lwjgl-lmdb:${lwjgl_version}:natives-linux"
+    lwjglNatives "org.lwjgl:lwjgl-zstd:${lwjgl_version}:natives-windows"
+    lwjglNatives "org.lwjgl:lwjgl-zstd:${lwjgl_version}:natives-linux"
+    jarJar files(mergedLwjglNatives)
+
+    // Mixins – NeoForge ships the Fabric fork of Sponge Mixin (org.spongepowered.asm.*)
+    implementation 'net.fabricmc:sponge-mixin:0.17.4+mixin.0.8.7'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+        // Zulu JDK 25 不在标准路径，Gradle 自动检测不到，需显式指定
+        vendor = JvmVendorSpec.AZUL
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 25
+}
+
+processResources {
+    def props = [
+        "version"       : project.version,
+        "commit"        : gitCommitHash(),
+        "buildtime"     : buildtime(),
+        "mc_version"    : project.minecraft_version,
+        "mod_version"   : project.mod_version
+    ]
+    inputs.properties(props)
+    filesMatching('META-INF/neoforge.mods.toml') {
+        expand(props)
+    }
+}
+
+jar {
+    from("LICENSE") { rename { "${it}_${project.archives_base_name}" } }
+}
+
+

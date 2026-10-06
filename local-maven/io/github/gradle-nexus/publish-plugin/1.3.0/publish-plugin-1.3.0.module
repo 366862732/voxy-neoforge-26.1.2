@@ -1,0 +1,78 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "io.github.gradle-nexus",
+    "module": "publish-plugin",
+    "version": "1.3.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.0.2"
+    }
+  },
+  "variants": [
+    {
+      "name": "shadowRuntimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "shadowed",
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "publish-plugin-1.3.0.jar",
+          "url": "publish-plugin-1.3.0.jar",
+          "size": 1229367,
+          "sha512": "3e6c4c6f140b0231157ac60b332b290623877d7b9ca9f0c638a8007e6db17b4454afeb1cf8001ab4f154a92693d4e62275ffd638f177ff42b6d4b752e3078e69",
+          "sha256": "c14e556376ba46989ee0067594ec242656f9dd84add60d0e254c48fe5b96cb48",
+          "sha1": "1fff84ca3747dd1bbc294df2bffd44812acd3cd8",
+          "md5": "0c6d95edfc97b2486ac398776d322fc9"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "publish-plugin-1.3.0-javadoc.jar",
+          "url": "publish-plugin-1.3.0-javadoc.jar",
+          "size": 261,
+          "sha512": "da3d887bb815313f50de22d6ac4fa3fab71e1b5f21be3f7c8ce418e650aa13b62ac974490d45cb67afea25b5562c8b3e6baac97b6abd3c1be8ce43906c83ff5c",
+          "sha256": "0782eaea47711937cf16172b0f1baaee48bc5cf786a81e763810d0ae74a1e620",
+          "sha1": "c403a3ad2d1517321c6bd1220a43b57bbe51e2da",
+          "md5": "fb1622c4e69d794540a881cf315f1a79"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "publish-plugin-1.3.0-sources.jar",
+          "url": "publish-plugin-1.3.0-sources.jar",
+          "size": 27478,
+          "sha512": "416564222f59f0ee5c9ff02f93cd5833f6a5590e42a1c1453abd115f11da644675412f3c86d2e5026dc6e396a7070672ebd3c597c148cca1bd809b56e687d221",
+          "sha256": "08dcc8f01f079f19a6ebc0263e65f16326ce9bdc40f9438896470f50473ebac8",
+          "sha1": "0681818461a3023796a2e70ef825c0442223087f",
+          "md5": "e3fce1b0d95bf7859ad7471e74675cfb"
+        }
+      ]
+    }
+  ]
+}

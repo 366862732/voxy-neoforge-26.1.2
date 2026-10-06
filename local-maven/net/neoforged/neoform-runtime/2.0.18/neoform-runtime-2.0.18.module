@@ -1,0 +1,62 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "net.neoforged",
+    "module": "neoform-runtime",
+    "version": "2.0.18",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "neoform-runtime-2.0.18-all.jar",
+          "url": "neoform-runtime-2.0.18-all.jar",
+          "size": 4479682,
+          "sha512": "EFE2DA16DD2FD4DFB2A3B962F16DEA131ED77E36A32A17A613F2C65F32024FD6653E89911B337A5DC7AE07AA4785404922D4688323D1198CFFEC22E4E9842AF5",
+          "sha256": "1FE29864DFBAD1EC41D54B35D308F078302B2F8785EEBFB8B90D9CDCD9433CB9",
+          "sha1": "AF5A11E64F209AC5909434AC2617B6AF19A02A8D",
+          "md5": "96D9C422F7029D97C1A14E70ED65B47B"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "capabilities": [
+        {
+          "group": "net.neoforged",
+          "name": "neoform-runtime-external-tools",
+          "version": "2.0.18"
+        }
+      ],
+      "files": [
+        {
+          "name": "neoform-runtime-2.0.18-all.jar",
+          "url": "neoform-runtime-2.0.18-all.jar",
+          "size": 4479682,
+          "sha512": "EFE2DA16DD2FD4DFB2A3B962F16DEA131ED77E36A32A17A613F2C65F32024FD6653E89911B337A5DC7AE07AA4785404922D4688323D1198CFFEC22E4E9842AF5",
+          "sha256": "1FE29864DFBAD1EC41D54B35D308F078302B2F8785EEBFB8B90D9CDCD9433CB9",
+          "sha1": "AF5A11E64F209AC5909434AC2617B6AF19A02A8D",
+          "md5": "96D9C422F7029D97C1A14E70ED65B47B"
+        }
+      ]
+    }
+  ]
+}

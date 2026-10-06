@@ -1,0 +1,56 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "net.sf.jopt-simple",
+    "module": "jopt-simple",
+    "version": "6.0-alpha-3",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "9.8.0"
+    }
+  },
+  "variants": [
+    {
+      "name": "runtime",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "jopt-simple-6.0-alpha-3.jar",
+          "url": "jopt-simple-6.0-alpha-3.jar",
+          "size": 0,
+          "sha512sum": "",
+          "md5sum": ""
+        }
+      ]
+    },
+    {
+      "name": "default",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "jopt-simple-6.0-alpha-3.jar",
+          "url": "jopt-simple-6.0-alpha-3.jar",
+          "size": 0,
+          "sha512sum": "",
+          "md5sum": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "org.gradle.toolchains",
+    "module": "foojay-resolver",
+    "version": "0.9.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.11"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "files": [
+        {
+          "name": "foojay-resolver-0.9.0.jar",
+          "url": "foojay-resolver-0.9.0.jar",
+          "size": 44829,
+          "sha512": "0b168f83712b0495029c72c30f128609d921677dada14e0fe8f5fd120e818df1a679b3009737138fda8c1139cdf6cdbb5079dc23edf32da11abc131a69661d9f",
+          "sha256": "c284089a3f87557f76022d99f2df2836568aa48b3fe4e2922392d566ba814176",
+          "sha1": "df30f39e9fd5060551bcc76f1def63afddb17ee7",
+          "md5": "668da50dc0aeb4070ef59dd64b0985bc"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "com.google.code.gson",
+          "module": "gson",
+          "version": {
+            "requires": "2.10.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "foojay-resolver-0.9.0.jar",
+          "url": "foojay-resolver-0.9.0.jar",
+          "size": 44829,
+          "sha512": "0b168f83712b0495029c72c30f128609d921677dada14e0fe8f5fd120e818df1a679b3009737138fda8c1139cdf6cdbb5079dc23edf32da11abc131a69661d9f",
+          "sha256": "c284089a3f87557f76022d99f2df2836568aa48b3fe4e2922392d566ba814176",
+          "sha1": "df30f39e9fd5060551bcc76f1def63afddb17ee7",
+          "md5": "668da50dc0aeb4070ef59dd64b0985bc"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "foojay-resolver-0.9.0-javadoc.jar",
+          "url": "foojay-resolver-0.9.0-javadoc.jar",
+          "size": 261,
+          "sha512": "153a409c8123d4241d3a593a763a270de1677797334dfc386072bf87a8c4ed54af9aca9b86ca86912088fb87fd9bcfe0267662591061c8e95379a489405bb33c",
+          "sha256": "b0b97c5969bc06e6bcdcbcde4a21c288cd16a3b3224682130800fecf591f52e6",
+          "sha1": "a9e1772f709bff66f385d192f2d2d4716c122726",
+          "md5": "3d5e2a9249a08ce4e94d00a3f3af6aa0"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "foojay-resolver-0.9.0-sources.jar",
+          "url": "foojay-resolver-0.9.0-sources.jar",
+          "size": 7355,
+          "sha512": "8e5d4655fc95df1c470f6d98cbf867b7b00623cd604e1b8455f1036b7217244909cf693860b07ca954d5b97cf3fea070d5a0bfc55240b81d2f420911f8a62fb0",
+          "sha256": "01441bbd3cba20bc4b153ebf767675166053fd4a965c18086aa02de3028b90a4",
+          "sha1": "32dbc9646cb9efd97b33b8e2563e7e8f45e76b2f",
+          "md5": "779fe908d712ab3dd16b06691f150dce"
+        }
+      ]
+    }
+  ]
+}

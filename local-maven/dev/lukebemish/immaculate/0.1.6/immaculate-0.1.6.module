@@ -1,0 +1,118 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "dev.lukebemish",
+    "module": "immaculate",
+    "version": "0.1.6",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.8"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.plugin.api-version": "8.8",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "immaculate-0.1.6.jar",
+          "url": "immaculate-0.1.6.jar",
+          "size": 40033,
+          "sha512": "f44c177e2f64a319d37cfa7faa8203154c106574b319b6fee7231830417797b4561ff18ef8d330df5834de0d4de3300af527d151ea18381f822639b65bff3d0e",
+          "sha256": "7fd4b72ba6ef75dd034ca9f4d26c569eeb272c9c28538f6266d6de76a3f47462",
+          "sha1": "4238494be187cb6efa01a89aae72cc6c55e30cab",
+          "md5": "633cc2c6b92c15a27657c2613518d5d3"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.plugin.api-version": "8.8",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "commons-io",
+          "module": "commons-io",
+          "version": {
+            "requires": "2.16.1"
+          }
+        },
+        {
+          "group": "org.eclipse.jgit",
+          "module": "org.eclipse.jgit",
+          "version": {
+            "requires": "6.10.0.202406032230-r"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "immaculate-0.1.6.jar",
+          "url": "immaculate-0.1.6.jar",
+          "size": 40033,
+          "sha512": "f44c177e2f64a319d37cfa7faa8203154c106574b319b6fee7231830417797b4561ff18ef8d330df5834de0d4de3300af527d151ea18381f822639b65bff3d0e",
+          "sha256": "7fd4b72ba6ef75dd034ca9f4d26c569eeb272c9c28538f6266d6de76a3f47462",
+          "sha1": "4238494be187cb6efa01a89aae72cc6c55e30cab",
+          "md5": "633cc2c6b92c15a27657c2613518d5d3"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "immaculate-0.1.6-sources.jar",
+          "url": "immaculate-0.1.6-sources.jar",
+          "size": 16389,
+          "sha512": "7545b434124693642868a1c49f9b5906d886784f970f2617d88476ecf7b8d826172959fc5f4131b63c847676a6996dfeecfe55995e742979e813c673edc67e41",
+          "sha256": "f30214b13523170a96f8c783f3cdbb6f1e70bf760246fa332c749b84aaaf890b",
+          "sha1": "309c5170b70e56899402a69e0be04116c1f000f1",
+          "md5": "a2e4a4d1df0787524d5e30d6805fda4c"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "immaculate-0.1.6-javadoc.jar",
+          "url": "immaculate-0.1.6-javadoc.jar",
+          "size": 132796,
+          "sha512": "6d02b62bd1e225962169b8d19695da35d5ff2df3fcc518a8fba0a732374ee07011892fa9d163228868ed38cf33f318d6bc839b8308f6ac951edd751219dd4717",
+          "sha256": "7f6fc9e2228214c2b498a4e4ec823ca08b4ea893c1eb1d9708e272cbb83e8aff",
+          "sha1": "99e316a0f7321dd715a386a17e4dc9f477653bd0",
+          "md5": "e9490f936f4f4fecebeb2dbde57c73d0"
+        }
+      ]
+    }
+  ]
+}

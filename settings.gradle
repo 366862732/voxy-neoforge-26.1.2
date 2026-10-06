@@ -1,0 +1,11 @@
+pluginManagement {
+    repositories {
+        maven {
+            name = 'Local'
+            url = 'D:/voxy-2612/local-maven'
+        }
+        mavenCentral()
+        mavenLocal()
+        gradlePluginPortal()
+    }
+}

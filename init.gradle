@@ -1,0 +1,33 @@
+if (System.getenv("GITHUB_ACTIONS") == "true") {
+    beforeSettings { settings ->
+        def cleanupTime = Long.parseLong(System.getProperty("CLEANUP_TIME", Long.toString(System.currentTimeMillis()-(60_000*10))));
+
+        settings.caches {
+            cleanup = Cleanup.ALWAYS
+
+            releasedWrappers.setRemoveUnusedEntriesOlderThan(cleanupTime)
+            snapshotWrappers.setRemoveUnusedEntriesOlderThan(cleanupTime)
+            downloadedResources.setRemoveUnusedEntriesOlderThan(cleanupTime)
+            createdResources.setRemoveUnusedEntriesOlderThan(cleanupTime)
+            buildCache.setRemoveUnusedEntriesOlderThan(cleanupTime)
+        }
+    }
+}
+
+// 确保 MavenLocal 排在所有仓库前面，以便优先使用本地缓存
+gradle.projectsLoaded {
+    gradle.rootProject.allprojects { project ->
+        project.afterEvaluate {
+            def repos = project.repositories
+            def allRepos = []
+            repos.each { allRepos.add(it) }
+            repos.clear()
+            repos.mavenLocal()
+            allRepos.each { repo ->
+                if (repo.name != 'MavenLocal') {
+                    repos.add(repo)
+                }
+            }
+        }
+    }
+}
