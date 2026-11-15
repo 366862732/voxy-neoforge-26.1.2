@@ -5,9 +5,10 @@ import me.cortex.voxy.client.core.rendering.util.SharedIndexBuffer;
 import me.cortex.voxy.common.Logger;
 import me.cortex.voxy.commonImpl.VoxyCommon;
 import net.minecraft.client.Minecraft;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.nio.channels.NonWritableChannelException;
 import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@EventBusSubscriber(modid = "voxy")
+@EventBusSubscriber(modid = "voxy", value = Dist.CLIENT)
 public class VoxyClient {
     private static final HashSet<String> FREX = new HashSet<>();
     private static FileLock EXCLUSIVE_LOCK;
@@ -62,8 +63,10 @@ public class VoxyClient {
         }
     }
 
+    // Voxy is client side only; register on the client dispatcher so the commands are also
+    // available when connected to a server that does not have Voxy installed.
     @SubscribeEvent
-    public static void onRegisterCommands(RegisterCommandsEvent event) {
+    public static void onRegisterClientCommands(RegisterClientCommandsEvent event) {
         if (VoxyCommon.isAvailable()) {
             event.getDispatcher().register(VoxyCommands.register());
         }

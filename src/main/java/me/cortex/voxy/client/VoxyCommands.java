@@ -61,10 +61,23 @@ public class VoxyCommands {
                                 .executes(ctx->verifyTLNs(ctx, BoolArgumentType.getBool(ctx, "attemptRepair")))));
 
         return Commands.literal("voxy")
+                .executes(VoxyCommands::printUsage)
                 .then(Commands.literal("reload")
                         .executes(VoxyCommands::reloadInstance))
                 .then(imports)
                 .then(debug);
+    }
+
+    private static int printUsage(CommandContext<CommandSourceStack> ctx) {
+        ctx.getSource().sendSuccess(() -> Component.literal("""
+                Voxy commands:
+                /voxy reload
+                /voxy import world raw <path>
+                /voxy import world zip <zipPath> [innerPath]
+                /voxy import world current
+                /voxy import world cancel
+                /voxy debug verifyTLNChildMask [attemptRepair]"""), false);
+        return 0;
     }
 
     private static int reloadInstance(CommandContext<CommandSourceStack> ctx) {
